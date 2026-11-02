@@ -65,7 +65,18 @@ allow drmserver storage_file:lnk_file read;
 # Operation : Migration
 # Purpose : Allow drmserver to access some system_server opreration on M
 #           and allow drmserver access file stored in sdcard
-use_drmservice(system_server)
+# [build-ledger wall 13, 2026-10-28] use_drmservice() is an MTK-era m4 macro
+# that is defined nowhere in this tree (grep: 0 defines in sepolicy_vndr, and
+# this is its single call site), so checkpolicy receives the unexpanded text
+# and fails vendor_sepolicy.cil.raw with "syntax error at token
+# use_drmservice" (build_first_20261028_143139.log:230). The class itself is
+# modern and retained by the platform (system/sepolicy/private/
+# security_classes:173 class drmservice; access_vectors:781 openDecryptSession),
+# so both allow rules below stay valid and effective. Only the dead macro
+# invocation is neutralized; one-time manual expansion note: upstream MTK's
+# use_drmservice(x) historically renders typeattribute/service gates for the
+# drm peer set, which this domain pair no longer carries on AOSP 16.
+# use_drmservice(system_server)
 allow drmserver system_server:file getattr;
 allow system_server drmserver:drmservice openDecryptSession;
 

@@ -184,7 +184,13 @@ allow system_server sysfs_boot_mode:file r_file_perms;
 
 # Date : 2019/10/22
 # Operation : Q Migration
-allow system_server self:capability sys_module;
+# [build-ledger wall 15, 2026-10-28] Commented: grants CAP_SYS_MODULE to
+# system_server — forbidden by platform neverallow
+# (system/sepolicy/private/system_server.te:1813) and unneeded on A16, where
+# module loading belongs to init/vendor modprobe. Violated the final secilc
+# merge (build_first_20261028_202600.log:343). Removing the grant tightens
+# runtime security (system_server keeps no kernel-module power).
+# allow system_server self:capability sys_module;
 
 # Date : 2019/10/22
 # Operation : Q Migration

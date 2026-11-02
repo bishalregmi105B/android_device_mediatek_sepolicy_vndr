@@ -236,7 +236,16 @@ type bootdevice_block_device, dev_type;
 type odm_block_device, dev_type;
 type oem_block_device, dev_type;
 type vendor_block_device, dev_type;
-type dtbo_block_device, dev_type;
+# [build-ledger wall 12, 2026-10-28] Duplicate type declaration vs platform:
+# system/sepolicy/public/device.te:99 now declares dtbo_block_device (AOSP 16 /
+# Lineage public policy), so this 2023-era MTK vendor tree's declaration is a
+# duplicate and checkpolicy fails vendor_sepolicy.cil.raw ("Duplicate
+# declaration of type", build_first_20261028_135926.log:1468). Cross-checked:
+# this is the ONLY collision between MTK basic/non_plat types and
+# system/sepolicy/{public,vendor} declarations. Retained source = platform
+# declaration (identical attribute set: dev_type); vendor labeling of the dtbo
+# partition continues to work through the platform type.
+# type dtbo_block_device, dev_type;
 type loader_ext_block_device, dev_type;
 type spm_device, dev_type;
 type persist_block_device, dev_type;

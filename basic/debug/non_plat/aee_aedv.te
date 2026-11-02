@@ -398,7 +398,13 @@ allow aee_aedv debugfs_tracing_instances:dir r_dir_perms;
 allow aee_aedv debugfs_tracing_instances:file r_file_perms;
 
 allow aee_aedv binderfs_logs:dir r_dir_perms;
-allow aee_aedv binderfs_logs:file r_file_perms;
+# [build-ledger wall 17, 2026-10-29] Commented: platform neverallow
+# (system/sepolicy/private/domain.te:739) permits binderfs_logs file reads
+# only for dumpstate/init/vendor_init; aee_aedv's :file grant was one of the
+# 3 reported violations (build_first_20261029_005705.log:3193). The :dir
+# grant above stays (neverallow covers :file only). AEE's core exception
+# collection runs through its own devcols/proc channels, not binder logs.
+# allow aee_aedv binderfs_logs:file r_file_perms;
 
 allow aee_aedv proc_ion:dir r_dir_perms;
 allow aee_aedv proc_ion:file r_file_perms;

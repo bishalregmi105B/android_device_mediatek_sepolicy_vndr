@@ -2,7 +2,16 @@
 # Common SEPolicy Rule
 # ==============================================
 
-ro.audio.usb.period_us u:object_r:exported_default_prop:s0 exact int
+# [build-ledger wall 16, 2026-10-29] Commented: duplicate exact-match
+# declaration of ro.audio.usb.period_us — the platform already declares it in
+# system/sepolicy/private/property_contexts:513 as audio_config_prop, and
+# host_init_verifier rejects the merged contexts with "Duplicate exact match
+# detected for 'ro.audio.usb.period_us'"
+# (build_first_20261029_003328.log:939, init.recovery.mt6768.rc validation).
+# Vendor re-declarations of platform-exact properties are forbidden on A16;
+# the platform's audio_config_prop labeling governs. Tree-wide sweep of all
+# sepolicy_vndr property_contexts files found this one collision only.
+# ro.audio.usb.period_us u:object_r:exported_default_prop:s0 exact int
 
 persist.adb.nonblocking_ffs u:object_r:exported_default_prop:s0 exact int
 

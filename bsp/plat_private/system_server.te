@@ -153,10 +153,18 @@ allow system_server installd:process signal;
 
 # Date:2020/09/04
 # Operation:R Migration, add permission for AMS dump binderinfo when ANR happened in user load
+# [build-ledger wall 17, 2026-10-29] Commented the :file grants: platform
+# neverallow (system/sepolicy/private/domain.te:739) forbids all domains except
+# dumpstate/init/vendor_init from read/open on binderfs_logs and
+# binderfs_logs_proc files ("binderfs logs contain sensitive information about
+# other processes"; checkpolicy reported 3 neverallow failures,
+# build_first_20261029_005705.log:3193-3195). The :dir grants remain — the
+# neverallow covers :file only. AMS binder-info dumps use dumpstate paths on
+# A16; this removes a legacy debug convenience, no user-facing function.
+# allow system_server binderfs_logs:file r_file_perms;
 allow system_server binderfs_logs:dir r_dir_perms;
-allow system_server binderfs_logs:file r_file_perms;
+# allow system_server binderfs_logs_proc:file r_file_perms;
 allow system_server binderfs_logs_proc:dir r_dir_perms;
-allow system_server binderfs_logs_proc:file r_file_perms;
 
 # Date:2020/09/24
 # Operation:R Migration, add permission for PMS access /data/media

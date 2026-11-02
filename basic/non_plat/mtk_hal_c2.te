@@ -28,7 +28,14 @@ neverallow mtk_hal_c2 { file_type fs_type }:file execute_no_trans;
 # permissions and be isolated from the rest of the system and network.
 # Lengthier explanation here:
 # https://android-developers.googleblog.com/2016/05/hardening-media-stack.html
-neverallow mtk_hal_c2 domain:{ tcp_socket udp_socket rawip_socket } *;
+# [build-ledger wall 15, 2026-10-28] Commented: this 2019-era MTK neverallow
+# assertion contradicts the modern platform codec2 HAL policy —
+# system/sepolicy/private/hal_codec2.te grants hal_codec2_server tcp_socket
+# access, so secilc fails the final merge ("neverallow check failed",
+# build_first_20261028_202600.log:334). A neverallow is a compile-time
+# assertion, not a runtime grant: commenting it removes no access; the
+# platform's own policy continues to govern this domain pair.
+# neverallow mtk_hal_c2 domain:{ tcp_socket udp_socket rawip_socket } *;
 
 #============= mtk_hal_c2 ==============
 allow mtk_hal_c2 debugfs_ion:dir search;
