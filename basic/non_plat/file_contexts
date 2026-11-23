@@ -698,7 +698,7 @@
 /dev/vpud u:object_r:vpud_device:s0
 
 # System files
-/system/bin/netutils-wrapper-1.0         u:object_r:netutils_wrapper_exec_bin:s0
+#/system/bin/netutils-wrapper-1.0         u:object_r:netutils_wrapper_exec_bin:s0
 
 ##########################
 # Vendor files
